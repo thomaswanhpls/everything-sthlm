@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Everything STHLM - {{browserTitle}}</title>
+	   <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/../css/agency.min.css">
+	   <!-- Fontawesone -->
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="/../css/child.css" rel="stylesheet">
+        <link href="/../css/jquery-ui.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+        <!-- jQuery -->
+        <script src="/../js/jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="/../js/bootstrap.min.js"></script>
+        <script src="//maps.google.com/maps/api/js"></script>
+        <script type="text/javascript"> 
+            $('.dropdown-toggle').dropdown();
+            $(function() {
+        $( "#slider" ).slider();
+    });
+        </script>
+	</head>
+	<body id="page-top" class="index">
+	<!-- Navigation 
+    <nav class="navbar navbar-default navbar-fixed-top">-->
+        <nav class="navbar navbar-default navbar-fixed-top navbar__background">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand page-scroll" href="../">Everything Sthlm</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right navbar-default">
+                        <li class="hidden">
+                            <a href="#page-top"></a>
+                        </li>
+                        {% if user.premium %}
+                            <li>
+                                <a class="text-yellow" href="/ads/newadform/">Ny annons</a>
+                            </li>
+
+                        {% elseif user and user.noOfAds < 3 and user.premium == false %}
+                            <li>
+                                <a class="text-yellow" href="/ads/newadform/">Ny annons</a>
+                            </li>
+                        {% elseif user and user.noOfAds >= 3 and user.premium == false %}
+                            <li>
+                                <a class="text-yellow" href="/user/premiumform">Uppgradera konto</a>
+                            </li>  
+
+                        {% else %}
+                            <li>
+                                <a class="text-yellow" href="/user/newuserform/">Skapa konto</a>
+                            </li>
+                        {% endif %}
+                        
+
+                        <li>
+                            <a class="" href="/ads">Annonser</a>
+                        </li>
+                        <li>
+                            <a class="page-scroll" href="/home/premiumpage">Premium</a>
+                        </li>
+                        {% if user %}
+                            <li class="hidden-sm hidden-md hidden-lg">
+                                <a class="page-scroll" href="/user/">Din sida</a>
+                            </li>
+                            <li class="hidden-sm hidden-md hidden-lg">
+                                <a class="page-scroll" href="/user/edituserform">Uppdatera profil</a>
+                            </li>
+                            <li class="dropdown hidden-xs">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><b>Konto</b> {% if newInterests %} <span class="badge">{{ newInterests|length }}</span>{% endif %}<span class="caret"></span></a>
+                                <ul id="user-dp" class="dropdown-menu">
+                                    <li>
+                                        <a class="page-scroll" href="/user/" style="color: #222222;">Din sida</a>
+                                    </li>
+                                    <li>
+                                        <a class="page-scroll" href="/user/edituserform" style="color: #222222;">Uppdatera profil</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li>
+                            <a class="page-scroll" href="/user">Din sida {% if newInterests %} <span class="badge">{{ newInterests|length }}</span>{% endif %}</a>
+                        </li>
+                        {% endif %}
+                        {% if not user %}
+                            <li class="hidden-sm hidden-md hidden-lg">
+                                <a class="page-scroll" href="/user/loginform">Logga in</a>
+                            </li>
+                            <li class="dropdown hidden-xs">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><b>Logga in</b> <span class="caret"></span></a>
+                                    <ul id="login-dp" class="dropdown-menu">
+                                        <li>
+                                             <div class="row">
+                                                    <div class="col-md-12">
+                                                             <form action="/user/login/" method="post" class="nav-loginform">
+                                                                <input type="hidden" name="redirect_here" value="1" />
+                                                                <div class="form-group">
+                                                                    <label for="email"><h5>E-post</h5></label>
+                                                                        <input type="text" id="email" name="email" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="password"><h5>Lösenord</h5></label>
+                                                                        <input type="password" id="password" name="password" class="form-control">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <button type="submit" class="btn btn-primary">Logga in</button>
+                                                                </div>
+                                                            </form>
+                                                                <div class="text-center nav-loginform__btn">
+                                                                    <h4><a href="/user/newuserform" id="create-acount">Skapa konto</a></h4>
+                                                                </div>
+                                                    </div>
+                                             </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% else %}
+            <li>
+                <a class="page-scroll" href="/user/logout" data-type="confirm" data-message="Vill du verkligen logga ut?">Logga ut</a>
+            </li>
+            {% endif %}
+        </ul>
+
+        </div>
+<!-- /.navbar-collapse -->
+        </div>
+<!-- /.container-fluid -->
+        </nav>

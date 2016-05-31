@@ -1,0 +1,101 @@
+{% set notDenied = 0 %}						 		
+{% for user in ad.interestedUsers %}
+	{% if not user.denied %}
+		{% set notDenied = notDenied + 1 %}
+	{% endif %}
+{% endfor %}
+
+<section>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2">
+				<div class="modal-body">
+					<!-- Project Details Go Here -->
+					<h2>{{ad.title}}</h2>
+					<div class="item-intro text-muted">
+						<h4>Typ av annons: {{ad.typeName}}</h4>
+					</div>
+					<p>{{ad.content}}</p>
+					<img class="img-responsive" src="{{ad.image}}" alt="">
+					<ul class="list-nobullet">
+						<li>
+							<h5>Publicerades
+								{% if ad.createdDaysAgo == 0 %} 
+									idag 
+								{% elseif ad.createdDaysAgo == 1 %}
+									för {{ad.createdDaysAgo}} dag sedan
+								{% else %}
+									för {{ad.createdDaysAgo}} dagar sedan
+								{% endif %}
+								av 
+								{% if user.id %}
+								<a href="/user/userprofile?id={{ad.userId}}">{{ad.userFirstname}}</a> 
+								{% else %} {{ad.userFirstname}}
+								{% endif %}
+							</h5>
+						</li>
+						<li>
+							<h5>Ersättning/Bytes mot: {{ad.payment}}</h5>
+						</li>
+						<li>
+							<h5>Taggar: 
+								{% if ad.tags %}
+									{% for tag in tags %}
+										{% if tag.id in ad.tags %}
+											{% if not loop.first %} {% endif %}{{tag.name}}
+										{% endif %}
+									{% endfor %}
+								{% endif %}
+							</h5>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2">
+				<div class="modal-body">
+					{% if user and countInterest > 1 and notDenied > 0 %}
+						Det är {{countInterest}} andra personer som har visat intresse för denna annons. 
+					{% elseif user and countInterest == 1 %}
+						Det är en annan person som har visat intresse för denna annons.
+					{% endif %}
+					{% if user and not userInterest and user.id != ad.userId and (user.interests == 0 or user.premium) %}
+						<a href="/ads/setuserinterest/?id={{ad.id}}"> <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-check"></i> Visa intresse </button></a>
+					{% elseif user and userInterest and user.id != ad.userId %}	
+						<a href="/ads/setuserinterest/?id={{ad.id}}"><button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Ångra intresse </button></a>
+					{% elseif user and not userInterest and user.id != ad.userId and (user.interests > 0 or not user.premium) %}
+						<p>Låter detta intressant? Uppgradera ditt konto till premium för att visa intresse för fler än en annons åt gången.</p>
+						<a href="/user/premiumform"><button type="button" class="btn btn-primary" data-dismiss="modal"> Uppgradera till Premium </button></a>
+
+					
+					{% elseif not user %}
+						<p>Låter detta intressant?</p>
+						<a href="/user/loginform"><button type="button" class="btn btn-primary" data-dismiss="modal"> Logga in! </button></a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12 col-lg-offset-2">
+				<div class="modal-body">
+					{% if user and ad.interestedUsers and notDenied > 0 %} 
+						<h4>Användare som har visat intresse för din annons:</h4>
+						{% for user in ad.interestedUsers %}
+							{% if not user.denied %}
+								<div class="row">
+									<div class="col-lg-8 col-lg-4">
+										{{user.firstname}} {{user.lastname}}<br> {{user.email}}
+									</div>
+									<div class="col-lg-8 col-lg-4">
+										<a href="/ads/denyuser/?user_id={{user.id}}&ad_id={{ad.id}}"><button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i>Neka</button></a>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}	
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

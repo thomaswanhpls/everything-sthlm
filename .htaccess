@@ -1,0 +1,36 @@
+Options +FollowSymLinks -MultiViews
+
+# Turn mod_rewrite on
+RewriteEngine On
+RewriteBase /
+
+RewriteRule ^(([a-z0-9\-]+/)*[a-z0-9\-]+)$ $1/ [NC,R=301,L]
+RewriteRule ^(adminer|css|uploads|styles|scripts|px|twig|templates|js|img)($|/) - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^/]+)$ index.php?class=$1 [L,QSA]
+RewriteRule ^([^/]+)/$ index.php?class=$1 [L,QSA]
+RewriteRule ^([^/]+)/([^/]+)$ index.php?class=$1&method=$2 [L,QSA]
+RewriteRule ^([^/]+)/([^/]+)/$ index.php?class=$1&method=$2 [L,QSA]
+
+# Use UTF-8 encoding for anything served text/plain or text/html
+AddDefaultCharset utf-8
+
+# Force UTF-8 for a number of file formats
+AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
+
+
+# 404
+# ErrorDocument 404 /templates/404.twig
+
+php_flag display_startup_errors on
+php_flag display_errors on
+php_flag html_errors on
+#php_flag  log_errors on
+#php_value error_log  /home/path/public_html/domain/PHP_errors.log
+
+<Files ~ "\.twig$">
+	Order allow,deny
+	Deny from all
+</Files>

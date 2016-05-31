@@ -1,0 +1,30 @@
+<section id="portfolio" class="bg-light-gray">
+    <div class="container">
+      <div class="row">
+           <div class="col-lg-12 text-center">
+               <h2 class="section-heading">Uppgradera ditt konto</h2>
+               <h3 class="section-subheading text-muted">Fyll i dina kortuppgifter och klicka på "uppgradera konto" för att bli Premium-användare.</h3>
+         	</div>
+       </div>
+
+		<div class="container">
+			<div class="row">
+			<div class="col-xs-12">
+				<form action="/user/setuserpremium/" method="post">
+					<div class="form-group">
+						<label for="card"><h4>Kortnummer</h4></label>
+						<input type="text" id="card" name="card" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="ccv"><h4>CCV</h4></label>
+						<input type="text" id="ccv" name="ccv" class="form-control">
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Uppgradera konto</button>
+					</div>
+				</form>
+			</div>
+			</div>
+		</div>
+	</div>
+</section>

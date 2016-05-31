@@ -1,0 +1,119 @@
+<section id="portfolio" class="bg-light-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<h2 class="section-heading">Annonser</h2>
+				<h3 class="section-subheading text-muted">Alla annonser som är aktiva just nu</h3>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<form action="" method="get">
+					<div class="form-group">
+						<label for="search"><h4>Sök på fritext</h4></label>
+						<input type="text" id="search" class="form-control" name="search" value="{{search}}">
+					</div>
+					{% if user %}
+						<div class="form-group">
+							<label><h4>Avstånd<span class="hidden-xs"> - Baseras på din angivna adress</span></h4></label><br />
+							<div id="search-distance"></div>
+							<input type="hidden" id="distance" name="distance" value="{{distance}}">
+							<p id="search-distance-text">
+								{% if distance == 10000 %}
+									Ingen begränsning
+								{% elseif not distance %}
+									Ingen begränsning
+								{% elseif distance < 10000 and distance > 999 %}
+									{{ (distance/1000)|number_format(1,'.') }} kilometer
+								{% else %}
+									{{distance}} meter
+								{% endif %}
+							</p>
+						</div>
+					{% endif %}
+					<div class="form-group">
+						<label><h4>Taggar</h4></label><br />
+						{% for tag in tags %}
+							<div class="checkbox-inline">
+								<label class="checkbox-inline">
+									<input type="checkbox" name="tags[]" value="{{tag.id}}"
+									{% if tag.id in searchTags %} checked="checked" {% endif %}
+									> {{tag.name}}
+								</label>
+							</div>
+						{% endfor %}
+					</div>
+					<div class="form-group">
+						<label><h4>Annonstyp</h4></label><br />
+						<div class="">
+							<select name="adtype" class="form-control">
+								<option value="">Alla annonstyper</option>
+								{% for adType in adTypes %}
+									<option value="{{adType.id}}" {% if adType.id in searchAdTypes %} selected="selected" {% endif %}>{{adType.name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Sök</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				{%
+					set correctNumbers = [
+						'noll',
+						'ett', 
+						'två',
+						'tre',
+						'fyra',
+						'fem',
+						'sex',
+						'sju',
+						'åtta',
+						'nio',
+						'tio',
+						'elva',
+						'tolv'
+					]
+				%}
+				{% if search and ads|length == 0 %}
+					Din sökning gav inga resultat.
+				{% elseif search and ads|length >= 1 and ads|length <= 12 %}
+					Din sökning gav {{correctNumbers[ads|length]}} resultat.
+				{% elseif search and ads|length > 12 %}
+					Din sökning gav {{ads|length}} resultat.
+				{% endif %}
+			</div>
+		</div>
+		<div class="row">
+    	 	{% for ad in ads if ad.active %}
+    	 		<div class="col-md-4 col-sm-6 portfolio-item">
+            		<a href="/ads/?id={{ad.id}}" class="portfolio-link normal-size" data-toggle="modal">
+                    	<div class="portfolio-hover">
+							<div class="portfolio-hover-content">
+								<i class="fa fa-plus fa-3x"></i>
+							</div>
+						</div>
+						<img src="{{ad.image}}" class="img-responsive" alt="">
+					</a>
+					<div class="portfolio-caption">
+						<a href="/ads/?id={{ad.id}}">{{ad.title}}</a>
+						<p class="text-muted">{{ad.dateCreated}}</p>
+						{% if ad.userId != user.id %}
+							{% if ad.distance %}
+								<p>Du är {{ad.distance}} bort</p>
+							{% endif %}
+						{% else %}
+							<p>Det här är din annons!</p>
+						{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</section>

@@ -1,0 +1,122 @@
+<section class="bg-light-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<h2 class="section-heading">Redigera Annons</h2>
+				<h3 class="section-subheading text-muted">{{ad.title}}</h3>
+			</div>
+		</div>
+		<div class="row">
+			<form action="/ads/updatead/" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="id" value="{{ad.id}}" />
+				<div class="form-group">
+					<label for="title"><h4>Titel</h4></label>
+					<input type="text" id="title" name="title" class="form-control" value="{{ad.title}}">
+				</div>
+
+				<div class="form-group">
+					<label for="content"><h4>Annonstext</h4></label>
+					<textarea id="content" name="content" class="form-control">{{ad.content}}</textarea> 
+				</div>
+
+				<div class="form-group">
+					<label for="payment"><h4>Ersättning/Bytes mot</h4></label>
+					<input type="text" id="payment" name="payment" class="form-control" value="{{ad.payment}}">
+				</div>
+
+				<h4>Ange adress</h4>
+				<p class="small">Du kan välja adress genom att använda sökfältet här nedan, leta dig fram och högerklicka på en position på kartan, eller låta oss identifiera din position genom att klicka på knappen nedan.</p>
+
+				<div class="form-group">
+					<input type="text" class="form-control half-margin-bottom" id="searchLocationInput" />
+					<button id="searchLocationBtn" class="btn btn-primary btn-lg half-margin-bottom">Sök plats</button>
+
+					<button id="getLocationBtn" class="btn btn-primary btn-lg half-margin-bottom">Hitta min plats automatiskt</button>
+
+				</div>
+				
+				<div class="gmap hidden-xs" id="gmap"></div>
+				<div class="form-group">
+
+					<label>Angiven adress</label>
+					<address id="gmaps_address">{{ad.address}}</address>
+					<input type="hidden" id="address" name="address" value="{{ad.address}}">
+					<input type="hidden" id="latitude" name="latitude" value="{{ad.latitude}}" />
+					<input type="hidden" id="longitude" name="longitude" value="{{ad.longitude}}" />
+
+				</div>
+				
+				<div class="form-group">
+					<label for="ad_type"><h4>Typ av annons</h4></label>
+					<select class="form-control" name="ad_type">
+						<option value="{{adType.id}}" selected>Välj annonstyp</option>
+						{% for adType in adTypes %}
+							<option value="{{adType.id}}"
+							{% if adType.id == ad.typeId %} 
+								selected="selected"
+							{% endif %}> 
+							{{adType.name}}</option>
+						{% endfor %}
+
+					</select>
+				</div>
+				<div class="form-group">
+
+					<label><h4>Taggar</h4></label><br />
+
+					{% for tag in tags %}
+
+						<div class="checkbox">
+
+							<label>
+								<input type="checkbox" name="tags[]" value="{{tag.id}}"
+								{% if tag.id in ad.tags %} 
+								checked="checked"
+								{% endif %}
+								> {{tag.name}}
+							</label>
+
+						</div>
+
+					{% endfor %}
+
+				</div>
+				<div class="form-group">
+					<label for="image"><h4>Bild</h4></label>
+					<input type="file" id="image" name="image" class="form-control" value=""> 
+				</div>
+				<div class="form-group">
+					<label for="date_expire"><h4>Annonsen tas ner</h4></label>
+					<p>{{ad.dateExpire}}</p>				
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary">Uppdatera annons</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+{% include "gmaps.function.twig" %}
+{% if not ad.latitude %}
+	{% set latitude = '59.339375' %}
+{% else %}
+	{% set latitude = ad.latitude %}
+{% endif %}
+{% if not ad.longitude %}
+	{% set longitude = '18.067189' %}
+{% else %}
+	{% set longitude = ad.longitude %}
+{% endif %}
+<script>
+	
+	$(document).ready(function(){
+	
+		$('#gmap').ready(function(){
+			
+			runGmaps({{latitude}}, {{longitude}}, true);
+						
+		});
+			
+	});
+	
+</script>

@@ -1,0 +1,101 @@
+{% set activeads = 0 %}
+{% set inactiveads = 0 %}
+
+{% for ad in ads %}
+
+  {% if ad.active %}
+    {% set activeads = activeads + 1 %}
+  {% else %}
+    {% set inactiveads = inactiveads + 1 %}
+  {% endif %}
+
+{% endfor %}
+<div class="container">
+  {% if interestingAds %}        
+        <div class="row row-centered">
+        <div class="col-md-12 col-sm-6 text-center">
+        <h4 class="section-subheading">Annonser du har visat intresse för</h4>
+        {% for ad in interestingAds %}
+
+          <div class="col-md-3 col-sm-6 portfolio-item col-centered">
+                <a href="/ads/?id={{ad.id}}" class="portfolio-link" data-toggle="modal">
+                  <div class="portfolio-hover">
+                    <div class="portfolio-hover-content">
+                      
+                    </div>
+                  </div>
+                   <div class="portfolio-caption">
+                    <h4><a href="/ads/?id={{ad.id}}">{{ad.title}}</a></h4>
+                    <p><small>Publicerad: {{ad.dateCreated}}</small></p>
+                    <p><small>Bäst före: {{ad.dateExpire}}</small></p>
+                   
+                </div>
+              </div>
+        {% endfor %}  
+        </div>
+      </div>
+      {% endif %}
+
+        {% if activeads > 0 %}
+        <div class="row row-centered">
+          <h4 class="section-subheading">Dina aktiva annonser</h4>
+          {% for ad in ads %}
+          {% if ad.active %}
+              <div class="col-md-4 col-sm-12 portfolio-item">
+                <a href="/ads/?id={{ad.id}}" class="portfolio-link normal-size" data-toggle="modal">
+
+                  <div class="portfolio-hover">
+                    <div class="portfolio-hover-content">
+                      <i class="fa fa-plus fa-3x"></i>
+                    </div>
+                  </div>
+                    <img src="{{ad.image}}" class="img-responsive" alt="">
+                </a>
+                  <div class="portfolio-caption-alt">
+                    <h4><a href="/ads/?id={{ad.id}}">{{ad.title}}</a></h4>
+                    <p>Publicerad: {{ad.dateCreated}}</p>
+                    <p>Bäst före: {{ad.dateExpire}}</p>
+  						      <a href="/ads/editadform/?id={{ad.id}}" class="btn btn-primary btn-sm">Redigera</a> <a href="/ads/inactivatead/?id={{ad.id}}" class="btn btn-primary btn-sm">Inaktivera</a>
+                  </div>
+                </div>
+            {% endif %}
+				  {% endfor %}
+    </div>
+{% endif %}
+
+{% if inactiveads > 0 %}
+    <div class="row row-centered">
+      <h4 class="section-subheading">Dina inaktiva annonser</h4>
+          {% for ad in ads %}
+            {% if not ad.active %}
+              <div class="col-md-4 col-sm-12 portfolio-item">
+                <a href="/ads/?id={{ad.id}}" class="portfolio-link normal-size" data-toggle="modal">
+
+                  <div class="portfolio-hover">
+                    <div class="portfolio-hover-content">
+                      <i class="fa fa-plus fa-3x"></i>
+                    </div>
+                  </div>
+                    <img src="{{ad.image}}" class="img-responsive" alt="">
+                </a>
+                  <div class="portfolio-caption-alt">
+                    <h4><a href="/ads/?id={{ad.id}}">{{ad.title}}</a></h4>
+                    <p>Publicerad: {{ad.dateCreated}}</p>
+                    <p>Bäst före: {{ad.dateExpire}}</p>
+                   
+                      {% if user.premium %}
+                      <a class="btn btn-primary btn-sm align-to-bottom" href="/ads/activateadform/?id={{ad.id}}">Aktivera annons</a>
+                      {% endif %}
+                      <a href="/ads/deletead/?id={{ad.id}}" data-type="confirm" data-message="Verkligen radera annons?" class="btn btn-primary btn-sm align-to-bottom">Radera</a>
+                    
+                </div>
+                </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+{% endif %}
+
+      </div>
+    </div>
+</div>
+ </section>

@@ -1,0 +1,22 @@
+<header>
+	<div class="container">
+		<div class="intro-text">
+			<div class="intro-content">
+				<div class="intro-lead-in">Nu är du vilse vännen!</div>
+				<div class="half-margin-bottom">
+					<p>Det här är en sida du bara ser när du kommit fel.
+					Kanske kan vi hjälpa dig rätt.<br />Vill du 
+					{% if user and not user.premium %}<a href="/user/premiumform">uppgradera till premium</a>, {% endif %}
+					{% if user %}<a href="/user/">se ditt konto</a>, {% endif %}
+					{% if user %}<a href="/user/edituserform">ändra dina uppgifter</a>, {% endif %}
+					{% if user %}<a href="/user/logout/">logga ut</a>, {% endif %}
+					{% if not user %}<a href="/user/newuserform/">skapa ett konto</a>, {% endif %}
+					{% if not user %}<a href="/user/">logga in</a>, {% endif %}
+					<a href=""></a>eller varför inte 
+					<a href="/ads/">kolla in alla annonser</a>
+					?<br />Annars tror vi det är bäst att du börjar om från <a href="/">startsidan</a>. Lycka till!</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>

@@ -1,0 +1,78 @@
+   <section id="portfolio" class="bg-darkest-gray">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading heading-white">Hej {{user.firstname}}</h2>
+                    {%
+                        set correctNumbers = [
+                            'noll',
+                            'ett', 
+                            'två',
+                            'tre',
+                            'fyra',
+                            'fem',
+                            'sex',
+                            'sju',
+                            'åtta',
+                            'nio',
+                            'tio',
+                            'elva',
+                            'tolv'
+                        ]
+                    %}
+
+                    {% if user.noOfAds == 0 %}
+                        <h3 class="section-subheading text-muted">Du har inte publicerat någon annons än.</h3>
+                    {% elseif user.noOfAds == 1 %}
+                        <h3 class="section-subheading text-muted">Du har publicerat en annons sedan du startade ditt konto.</h3>
+                    {% elseif user.noOfAds > 1 and user.noOfAds <= 12 %}
+                        <h3 class="section-subheading text-muted">Du har publicerat {{correctNumbers[user.noOfAds]}} annonser sedan du startade ditt konto.</h3>
+                    {% elseif user.noOfAds > 11 %}
+                        <h3 class="section-subheading text-muted">Du har publicerat {{user.noOfAds}} annonser sedan du startade ditt konto.</h3>
+
+                    {% endif %}
+
+                    {% if user.premium %}
+                        <h3 class="section-subheading text-muted"><a href="/ads/newadform">Sätt igång och skapa en ny!</a></h3>
+                
+                    {% elseif user.noOfAds < 3 and user.premium == false %}
+                        <h3 class="section-subheading text-muted"><a href="/ads/newadform">Sätt igång och skapa en ny!</a></h3>
+                        <div>
+                            <a href="premiumform" class="btn btn-primary">Uppgradera ditt konto</a>
+                        </div>
+                    {% else %}
+                        <p class="light-gray heading-white">Du har använt alla dina gratisannonser. Uppgradera ditt konto till Premium för kunna lägga in fler annonser.</p>
+                        <div>
+                            <a href="premiumform" class="btn btn-primary">Uppgradera ditt konto</a>
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        {% set titles = [] %}
+                        {% for interest in newInterests %}
+
+                        {% if interest.title not in titles %}
+                         
+                        <div class="col-lg-4">
+                            <p class="heading-white"><b>{{ interest.title }}</b></p>
+                            {% for interest2 in newInterests if interest.title == interest2.title %}
+                                
+                                 <p class="heading-white">{{ interest2.firstname }}</p>
+                                
+                            {% endfor %}
+                        </div>
+
+                        {% endif %}
+                        {% set titles = titles|merge([interest.title]) %} 
+                        {% endfor %}
+                        
+                    </div>
+                 </div>
+            </div>
+          
+		</div>
+    </section>
+    <section id="portfolio" class="bg-light-gray">
+        <div class="container">
+            {% include "user.ads.twig" %}
+        </div>
+    </section>

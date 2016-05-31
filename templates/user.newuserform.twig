@@ -1,0 +1,80 @@
+    <section class="bg-light-gray">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Skapa ny användare</h2>
+                    <h3 class="section-subheading text-muted">Skapa ny användare för att kunna logga in</h3>
+                </div>
+            </div>
+
+			<div class="container">
+				<div class="row">
+				<div class="col-xs-12">
+					<form action="/user/savenewuser/" method="post">
+						<div class="form-group">
+							<label for="firstname"><h4>Förnamn</h4></label>
+							<input type="text" id="firstname" name="firstname" class="form-control" placeholder="John">
+						</div>
+						<div class="form-group">
+							<label for="lastname"><h4>Efternamn</h4></label>
+							<input type="text" id="lastname" name="lastname" class="form-control" placeholder="Doe">
+						</div>
+						
+						<h4>Ange din adress</h4>
+						<p class="small">Du kan välja din adress genom att använda sökfältet här nedan, leta dig fram och högerklicka på en position på kartan, eller låta oss identifiera din position genom att klicka på knappen nedan.</p>
+
+						<div class="form-group">
+							<input type="text" class="form-control half-margin-bottom" id="searchLocationInput" />
+							<button id="searchLocationBtn" class="btn btn-primary btn-lg half-margin-bottom">Sök plats</button>
+
+							<button id="getLocationBtn" class="btn btn-primary btn-lg half-margin-bottom">Hitta min plats automatiskt</button>
+
+						</div>
+
+						<div class="gmap hidden-xs" id="gmap"></div>
+						<div class="form-group">
+
+							<label>Angiven adress</label>
+							<address id="gmaps_address">Ingen adress angiven</address>
+							<input type="hidden" id="address" name="address" value="">
+							<input type="hidden" id="latitude" name="latitude" value="" />
+							<input type="hidden" id="longitude" name="longitude" value="" />
+
+						</div>
+
+						<div class="form-group">
+							<label for="email"><h4>E-post</h4></label>
+							<input type="text" id="email" name="email" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="password"><h4>Lösenord</h4></label>
+							<input type="password" id="password" name="password" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="repeatedpassword"><h4>Upprepa Lösenord</h4></label>
+							<input type="password" id="repeatedpassword" name="repeatedpassword" class="form-control">
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-primary">Skapa användare</button>
+						</div>
+					</form>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{% include "gmaps.function.twig" %}
+<script>
+	
+	$(document).ready(function(){
+	
+		$('#gmap').ready(function(){
+			
+			runGmaps();
+						
+		});
+			
+	});
+	
+</script>

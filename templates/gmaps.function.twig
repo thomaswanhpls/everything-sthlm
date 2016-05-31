@@ -1,0 +1,213 @@
+<script type="text/javascript">
+
+	function runGmaps(_standard_lat, _standard_lng, add_marker) {
+
+		_standard_lat = typeof _standard_lat !== 'undefined' ? _standard_lat : '59.339375';
+   		_standard_lng = typeof _standard_lng !== 'undefined' ? _standard_lng : '18.067189';
+   		add_marker = typeof add_marker !== 'undefined' ? true : false;
+		var map;
+
+		map = new GMaps({
+	
+			div: '#gmap',
+			lat: _standard_lat,
+			lng: _standard_lng,
+			zoom: 12,
+		    zoomControl : true,
+		    zoomControlOpt: {
+				style : 'SMALL',
+				position: 'TOP_LEFT'
+			},
+			panControl : false
+	
+		});
+
+		if(add_marker) {
+
+			map.addMarker({
+						
+				lat: _standard_lat,
+				lng: _standard_lng
+						
+			});
+
+		}
+
+		$(document).on('click', '#searchLocationBtn', function(e) {
+
+			e.preventDefault();
+
+			GMaps.geocode({
+				address: $('#searchLocationInput').val(),
+				callback: function(results, status) {
+				if (status == 'OK') {
+					
+					var latlng = results[0].geometry.location;
+      				map.setCenter(latlng.lat(), latlng.lng());
+
+      				lat = latlng.lat();
+      				lng = latlng.lng();
+
+      				map.setZoom(16);
+      
+      				if(map.markers.length == 0) {
+
+						map.addMarker({
+							lat: lat,
+							lng: lng,
+						});
+						
+						$('#latitude').val(lat);
+						$('#longitude').val(lng);
+					
+					}
+					
+					else {
+									
+						var latlng = new google.maps.LatLng(lat, lng);
+						map.markers[0].setPosition(latlng);
+						$('#latitude').val(lat);
+						$('#longitude').val(lng);
+		
+					}
+						
+					$('#latitude').val(lat);
+					$('#longitude').val(lng);
+
+					var opt = {
+						lat : lat,
+						lng : lng,
+						callback : function(results, status) {
+							if (status == google.maps.GeocoderStatus.OK) {
+								$('#gmaps_address').text(results[0].formatted_address);
+								$('input#address').val(results[0].formatted_address);
+							}
+						}
+					}
+					
+					GMaps.geocode(opt);
+    
+    				}
+
+  				}
+
+			});
+
+		});
+
+		$(document).on('click', '#getLocationBtn', function(e) {
+
+			e.preventDefault();
+
+			GMaps.geolocate({
+  				success: function(position) {
+	    			
+	    			map.setCenter(position.coords.latitude, position.coords.longitude);
+
+	    			lat = position.coords.latitude;
+	    			lng = position.coords.longitude;
+
+	    			map.setZoom(16);
+
+	    			if(map.markers.length == 0) {
+
+						map.addMarker({
+							lat: lat,
+							lng: lng,
+						});
+						
+						$('#latitude').val(lat);
+						$('#longitude').val(lng);
+					
+					}
+					
+					else {
+									
+						var latlng = new google.maps.LatLng(lat, lng);
+						map.markers[0].setPosition(latlng);
+						$('#latitude').val(lat);
+						$('#longitude').val(lng);
+		
+					}
+						
+					$('#latitude').val(lat);
+					$('#longitude').val(lng);
+
+					var opt = {
+						lat : lat,
+						lng : lng,
+						callback : function(results, status) {
+							if (status == google.maps.GeocoderStatus.OK) {
+								$('#gmaps_address').text(results[0].formatted_address);
+								$('input#address').val(results[0].formatted_address);
+							}
+						}
+					}
+					
+					GMaps.geocode(opt);
+
+	  			},
+	  			error: function(error) {
+	    			alert(error.message);
+	  			},
+	  			not_supported: function() {
+	    			alert("Din webbläsare stödjer inte den här funktionen.");
+				},
+				always: function() {
+					//alert("Done!");
+				}
+			});
+
+		});
+
+		map.setContextMenu({
+			control: 'map',
+			options: [{
+				action: function(e) {
+					var index = map.markers.length;
+					var lat = e.latLng.lat();
+					var lng = e.latLng.lng();
+		
+					if(map.markers.length == 0) {
+
+						map.addMarker({
+							lat: lat,
+							lng: lng,
+						});
+						
+						$('#latitude').val(lat);
+						$('#longitude').val(lng);
+					
+					}
+					
+					else {
+									
+						var latlng = new google.maps.LatLng(lat, lng);
+						map.markers[0].setPosition(latlng);
+						$('#latitude').val(lat);
+						$('#longitude').val(lng);
+		
+					}
+					
+					var opt = {
+						lat : lat,
+						lng : lng,
+						callback : function(results, status) {
+							if (status == google.maps.GeocoderStatus.OK) {
+								$('#gmaps_address').text(results[0].formatted_address);
+								$('input#address').val(results[0].formatted_address);
+							}
+						}
+					}
+					
+					GMaps.geocode(opt);
+					
+				},
+				title: 'Placera markör',
+				name: 'place_marker'
+			}]
+		});
+
+	}
+
+</script>
